@@ -1,0 +1,12 @@
+# Byte-compiled / cache files
+__pycache__/
+*.pyc
+
+# macOS system files
+.DS_Store
+
+# C++ build artifacts
+build/
+
+# Python virtual environments
+venv/
