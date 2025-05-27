@@ -3,23 +3,39 @@ name: Run Tests
 on: [push, pull_request]
 
 jobs:
-  cpp:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: sudo apt update && sudo apt install cmake g++ -y
-      - run: |
-          cd cpp && mkdir -p build && cd build
-          cmake ..
-          make
-          ./run_tests
 
-  python:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [cpp, python]
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.10
-      - run: pip install -r requirements.txt
-      - run: pytest python/tests
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      if: matrix.language == 'python'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Python Dependencies
+      if: matrix.language == 'python'
+      run: pip install -r requirements.txt
+
+    - name: Run Python Tests
+      if: matrix.language == 'python'
+      run: pytest python/tests
+
+    - name: Install C++ Dependencies
+      if: matrix.language == 'cpp'
+      run: sudo apt update && sudo apt install cmake g++ -y
+
+    - name: Build and Run C++ Tests
+      if: matrix.language == 'cpp'
+      run: |
+        cd cpp
+        mkdir -p build && cd build
+        cmake ..
+        make
+        ./run_tests
