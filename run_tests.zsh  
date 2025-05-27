@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Running C++ Tests..."
+cd cpp
+mkdir -p build && cd build
+cmake .. && make
+./run_tests
+cd ../..
+
+echo "Running Python Tests..."
+pytest python/tests --disable-warnings

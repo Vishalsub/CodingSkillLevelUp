@@ -1,27 +1,25 @@
-name: Test Suite
+name: Run Tests
 
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
-  # python:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Setup Python
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: 3.10
-  #     - run: pip install pytest
-  #     - run: pytest python/tests
-
   cpp:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build & Run C++ Tests
-        run: |
-          sudo apt update && sudo apt install cmake g++ -y
+      - run: sudo apt update && sudo apt install cmake g++ -y
+      - run: |
           cd cpp && mkdir -p build && cd build
           cmake ..
           make
-          ./test_suite
+          ./run_tests
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+      - run: pip install -r requirements.txt
+      - run: pytest python/tests

@@ -1,11 +1,12 @@
-#include "leetcode/two_sum.hpp"
-#include <iostream>
-#include <cassert>
+#include "two_sum.hpp"
+#include <gtest/gtest.h>
 
-int main() {
-    TwoSum solver;
-    auto result = solver.solve({2, 7, 11, 15}, 9);
-    assert(result[0] == 0 && result[1] == 1);
-    std::cout << "test_two_sum passed.\n";
-    return 0;
+// 🔽 ADD these includes for std::vector
+#include <vector>
+
+TEST(TwoSumTest, BasicCase) {
+    Solution s;
+    std::vector<int> nums = {2, 7, 11, 15};
+    std::vector<int> result = s.twoSum(nums, 9);
+    EXPECT_EQ(result, std::vector<int>({0, 1}));
 }
